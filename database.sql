@@ -4,6 +4,7 @@ DROP TABLE IF EXISTS cart_items;
 DROP TABLE IF EXISTS carts;
 DROP TABLE IF EXISTS products;
 DROP TABLE IF EXISTS users;
+DROP TABLE IF EXISTS reviews;
 
 CREATE TABLE users (
     id SERIAL PRIMARY KEY,
@@ -54,3 +55,13 @@ CREATE TABLE order_items (
     PRIMARY KEY (order_id, product_id)
 );
 
+CREATE TABLE IF NOT EXISTS reviews (
+    id SERIAL PRIMARY KEY,
+    user_id INT REFERENCES users(id) ON DELETE CASCADE,
+    product_id INT REFERENCES products(id) ON DELETE CASCADE,
+    rating INT CHECK (rating >= 1 AND rating <= 5),  -- Rating between 1 and 5
+    review_text TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    UNIQUE (user_id, product_id)  -- Ensure a user can only review a product once
+);

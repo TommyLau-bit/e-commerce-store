@@ -1,0 +1,90 @@
+openapi: 3.0.0
+info:
+  title: E-Commerce API
+  description: API for managing users, products, carts, orders, and reviews in an e-commerce application.
+  version: 1.0.0
+servers:
+  - url: http://localhost:3000
+paths:
+  /api/users/register:
+    post:
+      summary: Register a new user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                email:
+                  type: string
+                password:
+                  type: string
+      responses:
+        '201':
+          description: User registered successfully
+        '400':
+          description: Validation error or user already exists
+
+  /api/users/login:
+    post:
+      summary: User login
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                password:
+                  type: string
+      responses:
+        '200':
+          description: Successful login with JWT token
+        '400':
+          description: Invalid credentials
+
+  /api/products:
+    get:
+      summary: Retrieve a list of products
+      responses:
+        '200':
+          description: A list of products
+
+    post:
+      summary: Add a new product (Admin only)
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                description:
+                  type: string
+                price:
+                  type: number
+                stock:
+                  type: integer
+                category:
+                  type: string
+      responses:
+        '201':
+          description: Product added successfully
+        '403':
+          description: Access denied
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

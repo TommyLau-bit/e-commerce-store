@@ -6,7 +6,11 @@ const pool = new Pool({
   host: process.env.DB_HOST,         // Host (usually localhost)
   database: process.env.DB_NAME,     // Database name (ecommerce)
   password: process.env.DB_PASSWORD, // Password
-  port: process.env.DB_PORT          // Port (default is 5432)
+  port: process.env.DB_PORT,
+  connectionString: process.env.DATABASE_URL,  // Use DATABASE_URL from Render
+  ssl: {
+    rejectUnauthorized: false
+    }         // Port (default is 5432)
 });
 
 module.exports = pool;  // Export the connection pool for use in other files
